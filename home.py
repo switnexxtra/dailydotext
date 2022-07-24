@@ -168,30 +168,6 @@ class ListItemWithCheckbox(FakeRectangularElevationBehavior, MDFloatLayout, TwoL
     def close_md_dialog(self, obj):
         self.md_dailog.dismiss()
 
-    """
-    def show_delete_dialog(self, the_list_item):
-        if not self.delete_dialog:
-            self.delete_dialog = MDDialog(
-                title="Delete Warning",
-                text="Are sure you want to delete Task?",
-                content_cls=ListItemWithCheckbox(),
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="CANCEL",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.accent_color,
-                    ),
-                    MDFillRoundFlatButton(
-                        text="DELETE",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.accent_color,
-                        on_release=self.delete_item
-                    ),
-                ],
-            )
-        self.delete_dialog.open()
-        """
-
 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     '''Custom left container'''
@@ -347,8 +323,6 @@ class XtrA(MDApp):
         api_url = 'https://api.api-ninjas.com/v1/quotes?'
         response = requests.get(api_url, headers={'X-Api-Key': 'PKdyDYuaaEZ2vwwPogR8WA==8LPK2F0HaIMSXkP4'})
         res = response.json()
-        print(res)
-        print(len(res))
 
     def show_loading_dialog(self, *args):
         if not self.loading_dialog:
@@ -675,7 +649,6 @@ class XtrA(MDApp):
                                          affirmation_image=random.choice(affirmation_bg_image)))
                 toast(f"30 free Affirmation have been added on {search}")
                 self.root.ids.affirm_text.text = f"30 free Affirmation have been added on {search}"
-            print(self_worth)
         elif search.lower() == 'relationship':
             self.show_loading_dialog()
             self.check_for_network()
@@ -885,8 +858,7 @@ class XtrA(MDApp):
             #from android.permissions import request_permissions, Permission
             #request_permissions([Permission.WRITE_EXTERNAL_STORAGE, Permission.READ_EXTERNAL_STORAGE])
 
-        self.file_manager.show('/')  # for computer
-        # self.file_manager.show(primary_ext_storage)  # for mobile phone
+        self.file_manager.show(primary_ext_storage)  # for mobile phone
         self.manager_open = True
 
     def select_path(self, path):
@@ -900,7 +872,6 @@ class XtrA(MDApp):
         self.exit_manager()
         toast(path)
         App.get_running_app().change_profile_source(path)
-        print(path)
 
     def exit_manager(self, *args):
         '''Called when the user reaches the root of the directory tree.'''
@@ -917,11 +888,9 @@ class XtrA(MDApp):
         return True
 
     def change_profile_source(self, path):
-        self.root.ids.profile.source = "C:" + path  # For computer
-        # self.root.ids.profile.source = path # For mobile phone
+        self.root.ids.profile.source = path # For mobile phone
         with open("profile_source.txt", "w") as f:
             f.write(path) # For mobile phone
-            f.write("C:" + path)  # For computer
 
         if os.path.isfile("profile_source.txt"):
             with open("profile_source.txt", "r") as f:
@@ -1057,9 +1026,9 @@ class XtrA(MDApp):
         self.root.ids.nav_icon5.disable = True
 
     def check_screen(self, *args):
-        if self.root.ids.screen_manager.current is 'splash':
+        if self.root.ids.screen_manager.current == 'splash':
             self.color_blank()
-        elif self.root.ids.screen_manager.current is 'login':
+        elif self.root.ids.screen_manager.current == 'login':
             self.color_blank()
             try:
                 self.show_banner_ads()
@@ -1067,7 +1036,7 @@ class XtrA(MDApp):
                 pass
             self.root.ids.login_back_btn.disabled = True
             self.root.ids.signup_back_btn.disabled = True
-        elif self.root.ids.screen_manager.current is 'signup':
+        elif self.root.ids.screen_manager.current == 'signup':
             self.color_blank()
             try:
                 self.show_banner_ads()
@@ -1088,19 +1057,19 @@ class XtrA(MDApp):
                 else:
                     self.root.ids[f"nav_icon{i + 1}"].text_color = rgba(200, 200, 200, 225)
         try:
-            if self.root.ids.screen_manager is 'weather':
+            if self.root.ids.screen_manager == 'weather':
                 self.show_interstitial_ads()
                 self.show_banner_ads()
-            elif self.root.ids.screen_manager is 'task':
+            elif self.root.ids.screen_manager == 'task':
                 self.show_interstitial_ads()
                 self.show_banner_ads()
-            elif self.root.ids.screen_manager is 'home':
+            elif self.root.ids.screen_manager == 'home':
                 self.show_interstitial_ads()
                 self.show_banner_ads()
-            elif self.root.ids.screen_manager is 'profile':
+            elif self.root.ids.screen_manager == 'profile':
                 self.show_interstitial_ads()
                 self.show_banner_ads()
-            elif self.root.ids.screen_manager is 'affirmation':
+            elif self.root.ids.screen_manager == 'affirmation':
                 self.show_interstitial_ads()
                 self.show_banner_ads()
         except:
@@ -1292,7 +1261,6 @@ class XtrA(MDApp):
         theme_connect.close()
         self.root.ids.login_back_btn.disabled = True
         self.root.ids.signup_back_btn.disabled = True
-        # print(current_theme)
         # [('Purple', 'BlueGray', 'Light')]
         Clock.schedule_once(self.check_for_network, 30)
         Clock.schedule_once(self.close_loading_dialog, 35)
@@ -1376,7 +1344,7 @@ class XtrA(MDApp):
                     add_task.ids.check.active = True
 
         except Exception as e:
-            print(e)
+            pass
 
     def menu(self, *args):
         self.root.ids.screen_manager.current = 'menu'
@@ -1384,20 +1352,15 @@ class XtrA(MDApp):
     def load(self, *args):
         try:
             self.show_banner_ads()
-            for i in range(3):
-                print(i + 1)
+            for i in range(30):
                 self.quotes_for_the_day()
-            for i in range(3):
+            for i in range(30):
                 self.most_popular_quote()
-                print(i + 1)
-            for i in range(5):
+            for i in range(3):
                 self.get_my_quotes()
             # to add 20 different quotes of the day we use the range function
-            for i in range(3):
+            for i in range(30):
                 self.get_quotes_of_the_day()
-                print(i + 1)
-                # self.quotes_for_the_day()
-                # self.get_quotes_of_the_day()
             # Load the saved tasks and add them to the MDList widget when the application start
 
         except requests.exceptions.ConnectionError:
@@ -1596,14 +1559,12 @@ class XtrA(MDApp):
             url = f'https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={api_key}'
             request_weather = requests.get(url)
             respond = request_weather.json()
-            #print(respond)
             lat = round(respond['coord']['lat'])
             lon = round(respond['coord']['lon'])
 
             url2 = f" http://api.openweathermap.org/data/2.5/forecast?q={city_name}&lat={lat}&lon={lon}&appid={api_key}"
             res = requests.get(url2)
             data = res.json()
-            #print(data)
 
             url3 = f"https://api.openweathermap.org/data/2.5/onecall?lat={lat}&lon={lon}&units=metric&exclude=hourly&appid={api_key}"
             requst = requests.get(url3)
@@ -1746,7 +1707,6 @@ class XtrA(MDApp):
             url = f"https://api.openweathermap.org/data/2.5/weather?q={city_name}&units=metric&APPID={API_KEY}"
             response = requests.get(url)
             x = response.json()
-            print(x)
             if x["cod"] != "404":
                 self.show_loading_dialog()
                 temperature = int(x["main"]["temp"])
@@ -1907,44 +1867,44 @@ class XtrA(MDApp):
         signup_email = self.root.ids.signup_email
         signup_password = self.root.ids.signup_password
         try:
-            if self.root.ids.screen_manager.current is 'signup':
+            if self.root.ids.screen_manager.current == 'signup':
                 self.send_signup_data(signup_email, signup_password)
                 self.close_error_dialog()
-            elif self.root.ids.screen_manager.current is 'login':
+            elif self.root.ids.screen_manager.current == 'login':
                 self.retrieve_and_validate(login_email, login_password)
                 self.close_error_dialog()
-            elif self.root.ids.screen_manager.current is 'menu':
+            elif self.root.ids.screen_manager.current == 'menu':
                 self.auto_get_weather_and_location()
                 self.close_error_dialog()
                 for i in range(3):
                     self.get_my_quotes()
                     self.close_error_dialog()
-                for i in range(5):
+                for i in range(30):
                     self.most_popular_quote()
                     self.close_error_dialog()
-                for i in range(5):
+                for i in range(30):
                     self.get_quotes_of_the_day()
                     self.close_error_dialog()
-                for i in range(5):
+                for i in range(30):
                     self.quotes_for_the_day()
                     self.close_error_dialog()
-            elif self.root.ids.screen_manager.current is 'home':
-                for i in range(3):
+            elif self.root.ids.screen_manager.current == 'home':
+                for i in range(30):
                     self.get_my_quotes()
                     self.close_error_dialog()
-                for i in range(5):
+                for i in range(30):
                     self.most_popular_quote()
                     self.close_error_dialog()
-                for i in range(5):
+                for i in range(30):
                     self.get_quotes_of_the_day()
                     self.close_error_dialog()
-                for i in range(5):
+                for i in range(30):
                     self.quotes_for_the_day()
                     self.close_error_dialog()
-            elif self.root.ids.screen_manager.current is 'affirmation':
+            elif self.root.ids.screen_manager.current == 'affirmation':
                 self.get_affirmed()
                 self.close_error_dialog()
-            elif self.root.ids.screen_manager.current is 'weather':
+            elif self.root.ids.screen_manager.current == 'weather':
                 city_name = self.search_weather_dialog.content_cls.ids.weather_search_input.text
                 self.get_weather(city_name)
                 self.close_error_dialog()
@@ -1981,7 +1941,6 @@ class XtrA(MDApp):
             url = "https://zenquotes.io/api/quotes" #"https://type.fit/api/quotes"
             response = requests.get(url)
             passed = response.json()
-            #print(passed)
             quotes = passed[0]["q"]
             author = passed[1]["a"]
             toast("Done", background=self.theme_cls.accent_color)
@@ -2014,11 +1973,9 @@ class XtrA(MDApp):
         url ="http://api.quotable.io/random"
         request = requests.get(url)
         responsed = request.json()
-        print(responsed)
         tags = responsed["tags"]
         quotes = responsed["content"]
         author = responsed["author"]
-        print(tags, quotes, author)
         for i in range(1):
             self.root.ids.most_popular_quotes_layout.add_widget(MostPopularMotivation(most_popular_quotes_text=quotes,most_popular_quotes_author=author, most_popular_quote_bg_image=random.choice(motivation_bg_images)))
 
@@ -2042,8 +1999,6 @@ class XtrA(MDApp):
         api_url = 'https://api.api-ninjas.com/v1/quotes?'
         request = requests.get(api_url, headers={'X-Api-Key': 'PKdyDYuaaEZ2vwwPogR8WA==8LPK2F0HaIMSXkP4'})
         res = request.json()
-        print(res)
-        print(len(res))
         quotes = res[0]['quote']
         author = res[0]['author']
         for i in range(1):
@@ -2119,7 +2074,6 @@ class XtrA(MDApp):
             url = f"http://api.quotable.io/search/quotes?query={search_input}"
             request = requests.get(url)
             most_popular_response = request.json()
-            print(most_popular_response)
             most_popular_quote = most_popular_response['results'][0]['content']
             most_popular_author = most_popular_response['results'][0]['author']
             self.root.ids.most_popular_quotes_layout.clear_widgets()
@@ -2203,6 +2157,43 @@ class XtrA(MDApp):
                 MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
                                       most_popular_quotes_author=most_popular_author,
                                       most_popular_quote_bg_image=random.choice(motivation_bg_images)))
+            most_popular_quote = most_popular_response['results'][11]['content']
+            most_popular_author = most_popular_response['results'][11]['author']
+            self.root.ids.most_popular_quotes_layout.add_widget(
+                MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
+                                      most_popular_quotes_author=most_popular_author,
+                                      most_popular_quote_bg_image=random.choice(motivation_bg_images)))
+
+            most_popular_quote = most_popular_response['results'][12]['content']
+            most_popular_author = most_popular_response['results'][12]['author']
+            self.root.ids.most_popular_quotes_layout.add_widget(
+                MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
+                                      most_popular_quotes_author=most_popular_author,
+                                      most_popular_quote_bg_image=random.choice(motivation_bg_images)))
+            most_popular_quote = most_popular_response['results'][13]['content']
+            most_popular_author = most_popular_response['results'][13]['author']
+            self.root.ids.most_popular_quotes_layout.add_widget(
+                MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
+                                      most_popular_quotes_author=most_popular_author,
+                                      most_popular_quote_bg_image=random.choice(motivation_bg_images)))
+            most_popular_quote = most_popular_response['results'][14]['content']
+            most_popular_author = most_popular_response['results'][14]['author']
+            self.root.ids.most_popular_quotes_layout.add_widget(
+                MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
+                                      most_popular_quotes_author=most_popular_author,
+                                      most_popular_quote_bg_image=random.choice(motivation_bg_images)))
+            most_popular_quote = most_popular_response['results'][15]['content']
+            most_popular_author = most_popular_response['results'][15]['author']
+            self.root.ids.most_popular_quotes_layout.add_widget(
+                MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
+                                      most_popular_quotes_author=most_popular_author,
+                                      most_popular_quote_bg_image=random.choice(motivation_bg_images)))
+            most_popular_quote = most_popular_response['results'][16]['content']
+            most_popular_author = most_popular_response['results'][16]['author']
+            self.root.ids.most_popular_quotes_layout.add_widget(
+                MostPopularMotivation(most_popular_quotes_text=most_popular_quote,
+                                      most_popular_quotes_author=most_popular_author,
+                                      most_popular_quote_bg_image=random.choice(motivation_bg_images)))                                                                                                        
 
         except IndexError:
             toast(f"no Data on {search_input} for search_for_quotes_for_the_day")
@@ -2247,9 +2238,9 @@ class XtrA(MDApp):
 
     def search(self):
         self.show_loading_dialog()
-        for i in range(5):
+        for i in range(30):
             self.search_of_get_quotes_of_the_day()
-        for i in range(5):
+        for i in range(30):
             Clock.schedule_once(self.search_for_quotes_for_the_day, 5)
         self.search_most_popular_quote()
         self.close_home_search_dialog()
