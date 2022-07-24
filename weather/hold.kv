@@ -1,0 +1,60 @@
+MDCarousel:
+    id: affirmation_layout
+    #on_slide_progress:
+    size_hint: 1, .8
+    pos_hint: {"center_x":.48, "center_y":.48}
+    #do_something()
+    #on_slide_complete:
+    #do_something()
+
+
+ScrollView:
+                    do_scroll_y: False
+                    do_scroll_X: True
+                    size_hint: 1, .85
+                    pos_hint: {"center_x":.48, "center_y":.45}
+                    MDGridLayout:
+                        id: affirmation_layout
+                        size_hint_x: None
+                        height: self.minimum_height
+                        width: self.minimum_width
+                        rows: 1
+                        spacing: 10
+                        padding: 18, 0
+
+
+                        self.completed = self.completed
+                    self.pending = self.pending - 1
+                    self.root.ids.container.add_widget(add_task)
+
+
+
+                    MDIconButton:
+                    icon: "chevron-left"
+                    pos_hint: {"center_y":.95}
+                    on_release:
+                        screen_manager.transition.direction = "right"
+                        screen_manager.current = "menu"#app.show_todo_dialog()
+
+
+
+                        MDFloatLayout:
+                        size_hint: .24, .31
+                        radius: [35]
+                        #spacing: 4
+                        #padding: 5
+                        md_bg_color: 1, 1, 1, 1
+                        pos_hint: {"center_x":.76, "center_y":.23}
+                        FitImage:
+                            id: profile_pics
+                            source: "store/profilepicsdemo1.jfif"
+                            size_hint:.8,  .85
+                            keep_ratio: False
+                            allow_stretch: True
+                            radius: [30]
+                            pos_hint: {"center_x":.5, "center_y":.5}
+                        MDIconButton:
+                            icon: "camera"
+                            pos_hint: {"center_x":.85, "center_y":.18}
+                            on_release:
+                                app.file_manager_open()
