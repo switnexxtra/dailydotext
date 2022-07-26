@@ -1315,8 +1315,8 @@ class XtrA(MDApp):
         Clock.schedule_interval(self.greet, 50)
         Clock.schedule_interval(self.check_for_network, 75)
         Clock.schedule_once(self.load, 20)
-        #self.auto_get_weather_and_location()
-        #self.get_affirmed()
+        self.auto_get_weather_and_location()
+        self.get_affirmed()
 
         today = datetime.date.today()
         wd = datetime.date.weekday(today)
