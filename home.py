@@ -223,7 +223,8 @@ class XtrA(MDApp):
     cursor = mydatabase.cursor()
     cursor.execute("select * from logindata")
     for i in cursor.fetchall():
-        print(i[0], i[1])
+        #print(i[0], i[1])
+        toast("loading please wait.........")
     user_store = JsonStore('user_details.json')
     task_progress = JsonStore('user_task_progress.json')
 
