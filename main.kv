@@ -264,6 +264,7 @@
         orientation: "vertical"
         pos_hint: {'center_x':.5, 'center_y':.5}
         size_hint: 1, 1
+        md_bg_color: 0, 0, 0, 1
         padding: "10dp"
         spacing: "10dp"
         radius: [20]
@@ -273,6 +274,14 @@
             pos_hint: {'center_x':.5, 'center_y':.5}
             size_hint: 1, 1
 
+            radius: [20]
+        MDFloatLayout:
+            orientation: "vertical"
+            pos_hint: {'center_x':.5, 'center_y':.5}
+            size_hint: 1, 1
+            md_bg_color: 0, 0, 0, .45
+            padding: "10dp"
+            spacing: "10dp"
             radius: [20]
         MDLabel:
             id: most_popular_quotes_text
@@ -300,7 +309,8 @@
     size: 280, 100
     radius: [13]
     elevation: 10
-    md_bg_color: 1, 1, 1, 1
+    padding: "10dp"
+    md_bg_color: 1, 1, 1, .3
     MDFloatLayout:
         orientation: "vertical"
         pos_hint: {"center_x":.5, "center_y":.5}
@@ -341,6 +351,12 @@
             pos_hint: {'center_x':.5, 'center_y':.5}
             size_hint: 1, 1
             radius: [20]
+        MDFloatLayout:
+            orientation: "vertical"
+            md_bg_color: 0,0,0,.45
+            pos_hint: {'center_x':.5, 'center_y':.5}
+            size_hint: 1, 1
+            radius: [20]
         MDLabel:
             id: quotes_for_the_day_text
             text:  root.quotes_for_the_day_text #""" "Life" is hard, but you got to show her that you are "though" """
@@ -348,7 +364,7 @@
             pos_hint: {"center_x":.5, "center_y":.58}
             font_size: 18
             font_style: "Subtitle2"
-            color: rgba(0, 0, 255, 255)
+            color: 1, 1, 1, 1 #rgba(0, 0, 255, 255)
             #adaptive_height: True
             #adaptive_width: True
         MDLabel:
@@ -375,7 +391,7 @@
             pos_hint: {"center_x":.5, 'y':.35}
         MDRaisedButton:
             text: "Delete"
-            on_release:  app.delete_task_item(root)
+            on_release: root.delete_task_item(the_list_item) #app.delete_task_item(root.self)
             #app.delete()
             #root.delete_task_item(self) #lambda x: root.delete_task_item(the_list_item)
             pos_hint: {"center_x":.8, 'y':.1}
@@ -391,7 +407,7 @@
     markup: True
     size_hint: None, None
     size: 290, 80
-    md_bg_color: 1, 1, 1, 1
+    md_bg_color: 1, 1, 1, .3
     elevation: 10
     radius: [15]
 
@@ -407,8 +423,9 @@
         theme_text_color: "Custom"
         text_color: 1, 0, 0, 1
         on_release:
+            #app.show_delete_task_dialog()
             root.delete_item(the_list_item)
-            #app.progress_after_delete(check, the_list_item)
+            app.progress_after_delete(check, the_list_item)
 
 <DialogContent>:
     orientation: "vertical"
@@ -483,7 +500,7 @@ MDScreen:
                     halign: "center"
                     pos_hint:{"center_x":.5, "center_y":.15}
                     theme_text_color: "Custom"
-                    text_color: 1, 1, 0, 1
+                    text_color: 1, 0, 0, 1
                     font_size: 13
                     font_name: "LPoppins"
 
@@ -2423,13 +2440,13 @@ MDScreen:
 
                 FitImage:
                     source: "menuimages/aboutapp.jpeg"
-                    size_hint: 1, .45
+                    size_hint: 1, .35
                     radius: [0, 0 ,30,30]
-                    pos_hint: {"center_x":.5, "center_y":.78}
+                    pos_hint: {"center_x":.5, "center_y":.83}
                 MDLabel:
                     text: "About The App"
                     halign: "center"
-                    pos_hint: {"center_x":.5, "center_y":.52}
+                    pos_hint: {"center_x":.5, "center_y":.62}
                     font_size: 18
                     color: 1, 1, 1, 1
                     font_style: "H6"
@@ -2437,7 +2454,7 @@ MDScreen:
                 MDLabel:
                     text: "this app was developed by 'switnex xtra' and his team to help a lot of. our team sat a thought about this App before creating "
                     halign: "center"
-                    pos_hint: {"center_x":.5, "center_y":.45}
+                    pos_hint: {"center_x":.5, "center_y":.55}
                     font_size: 13
                     size_hint_x: .9
                     color: 1, 1, 1, 1
@@ -2446,16 +2463,16 @@ MDScreen:
                 MDLabel:
                     text: "What Does The App Do?"
                     halign: "center"
-                    pos_hint: {"center_x":.5, "center_y":.38}
+                    pos_hint: {"center_x":.5, "center_y":.48}
                     font_size: 18
                     color: 1, 1, 1, 1
                     font_style: "H6"
                     color: app.theme_cls.primary_color
 
                 MDLabel:
-                    text: "this app provides you with over 1k+ daily motivations on various topics such as happiness, wisdom, and more. it also provides you with over 2k+ daily Affirmations on lots of topics like self worth, man, woman and more. also this app can be used to calculate your Body Mass Index (BMI), schedule tasks, and know your weather. this is why this App is 'MY Paddy' your paddy."
+                    text: "this app provides you with over 1k+ daily motivations on various topics such as happiness, wisdom, and more. it also provides you with over 2k+ daily Affirmations on lots of topics like self worth, man, woman and more. also this app can be used to calculate your Body Mass Index (BMI), schedule tasks, and know your weather. this is why this App is 'Your Own Gee!' & your paddy."
                     halign: "center"
-                    pos_hint: {"center_x":.5, "center_y":.23}
+                    pos_hint: {"center_x":.5, "center_y":.32}
                     font_size: 12
                     size_hint_x: .9
                     color: 1, 1, 1, 1
@@ -2467,7 +2484,7 @@ MDScreen:
                     elevation: 7
                     radius: [8]
                     padding: 8
-                    pos_hint: {"center_x":.13, "center_y":.95}
+                    pos_hint: {"center_x":.1, "center_y":.95}
                     MDFloatLayout:
                         size_hint: .9, .9
                         pos_hint: {"center_x":.5, "center_y":.5}
@@ -2506,7 +2523,7 @@ MDScreen:
                     on_release:
                         screen_manager.current = "menu"
                         app.change_color(self)
-                        #app.check_screen()
+                        app.show_interstitial_ads()
                 MDIconButton:
                     id: nav_icon2
                     icon: "home-currency-usd"
@@ -2516,7 +2533,7 @@ MDScreen:
                     pos_hint:{"center_x":.14, "center_y":.48}
                     on_release:
                         screen_manager.current = "home"
-                        app.change_color(self)
+                        app.show_interstitial_ads(self)
                         #app.check_screen()
 
                 MDIconButton:
@@ -2529,7 +2546,7 @@ MDScreen:
                     on_release:
                         screen_manager.current = "weather"
                         app.change_color(self)
-                        #app.check_screen()
+                        app.show_interstitial_ads()
 
                 MDIconButton:
                     id: nav_icon4
@@ -2541,7 +2558,7 @@ MDScreen:
                     on_release:
                         screen_manager.current = "task"
                         app.change_color(self)
-                        #app.check_screen()
+                        app.show_interstitial_ads()
 
                 MDIconButton:
                     id: nav_icon5
@@ -2553,4 +2570,4 @@ MDScreen:
                     on_release:
                         screen_manager.current = "profile"
                         app.change_color(self)
-                        #app.check_screen()
+                        app.show_interstitial_ads()

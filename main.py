@@ -15,7 +15,7 @@ from kivy.uix.image import Image
 from kivymd.uix.picker import MDThemePicker
 import random
 import requests
-from kivmob import KivMob, TestIds
+from kivmob import KivMob
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.core.text import LabelBase
@@ -35,18 +35,21 @@ from kivymd.uix.filemanager import MDFileManager
 from kivymd.uix.floatlayout import MDFloatLayout
 from kivymd.uix.picker import MDDatePicker
 from kivymd.uix.snackbar import Snackbar
-
-from database import Database
-# Initialize db instance
-db = Database()
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
 from kivymd.uix.behaviors import FakeRectangularElevationBehavior
 
-if platform == "android":
-    from android.permissions import request_permissions, Permission
-    request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
+from database import Database
+# Initialize db instance
+# the database side
+
+
+db = Database()
+
+#if platform == "android":
+    #from android.permissions import request_permissions, Permission
+    #request_permissions([Permission.READ_EXTERNAL_STORAGE, Permission.WRITE_EXTERNAL_STORAGE])
 
 Window.size = (320, 620)
 
@@ -77,6 +80,7 @@ class MostPopularMotivation(MDCard):
     most_popular_quotes_text = StringProperty()
     most_popular_quotes_author = StringProperty()
     most_popular_quote_bg_image = StringProperty()
+    #most_popular_quotes_bg_color = StringProperty()
 
 
 class ErrorDialogContent(MDFloatLayout):
@@ -118,10 +122,6 @@ class ListItemWithCheckbox(FakeRectangularElevationBehavior, MDFloatLayout, TwoL
     text = StringProperty()
     secondary_text = StringProperty()
     delete_dialog = None
-    #pending = NumericProperty(0)
-    #completed = NumericProperty(0)
-    #all_tasks = NumericProperty(0)
-    #del_dialog = StringProperty()
     '''Custom list item'''
 
     def __init__(self, pk=None, **kwargs):
@@ -145,52 +145,6 @@ class ListItemWithCheckbox(FakeRectangularElevationBehavior, MDFloatLayout, TwoL
         #the_list_item = self.ids.the_list_item
         self.parent.remove_widget(the_list_item)
         db.delete_task(the_list_item.pk)  # Here
-
-    def show_delete_dialog(self, obj):
-        self.md_dailog = MDDialog(title="Delete Tasks",text="are sure you want to delete this tasks",
-                         size_hint=[.75,.6],
-                         buttons=[
-                             MDFlatButton(
-                                 text="CANCEL",
-                                 theme_text_color="Custom",
-                                 text_color=self.theme_cls.accent_color,
-                                 on_press=self.close_md_dialog
-                             ),
-                             MDFillRoundFlatButton(
-                                 text="DELETE",
-                                 md_bg_color=(255/255,76/255,48/255,255),
-                                 on_release=self.delete_item,
-                             ),
-                         ],
-                         )
-        self.md_dailog.open()
-
-    def close_md_dialog(self, obj):
-        self.md_dailog.dismiss()
-
-    """
-    def show_delete_dialog(self, the_list_item):
-        if not self.delete_dialog:
-            self.delete_dialog = MDDialog(
-                title="Delete Warning",
-                text="Are sure you want to delete Task?",
-                content_cls=ListItemWithCheckbox(),
-                buttons=[
-                    MDFillRoundFlatButton(
-                        text="CANCEL",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.accent_color,
-                    ),
-                    MDFillRoundFlatButton(
-                        text="DELETE",
-                        theme_text_color="Custom",
-                        text_color=self.theme_cls.accent_color,
-                        on_release=self.delete_item
-                    ),
-                ],
-            )
-        self.delete_dialog.open()
-        """
 
 
 class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
@@ -246,19 +200,20 @@ class XtrA(MDApp):
     mydatabase = mysql.connector.Connect(host="localhost", user="root", password="60587102", database="loginform")
     cursor = mydatabase.cursor()
     cursor.execute("select * from logindata")
-    for i in cursor.fetchall():
-        print(i[0], i[1])
+    #for i in cursor.fetchall():
+        #("loading...")
+        #print(i[0], i[1])
     user_store = JsonStore('user_details.json')
     task_progress = JsonStore('user_task_progress.json')
 
     def build(self):
-        self.theme_cls.primary_palette = "DeepPurple"
-        self.theme_cls.accent_palette = "Red"
+        #self.theme_cls.primary_palette = "DeepPurple"
+        #self.theme_cls.accent_palette = "Red"
 
         self.ads = KivMob('ca-app-pub-3940256099942544~3347511713')
-        self.ads.new_banner('ca-app-pub-3940256099942544/6300978111', top_pos=False)
+        self.ads.new_banner('ca-app-pub-2803983162960183/4479922368', top_pos=False)
         self.ads.request_banner()
-        self.ads.new_interstitial('ca-app-pub-3940256099942544/1033173712')
+        self.ads.new_interstitial('ca-app-pub-2803983162960183~6343668376')
         self.ads.request_interstitial()
         # create table for theme picker
         theme_connect = sqlite3.connect('myapp.db')
@@ -342,21 +297,13 @@ class XtrA(MDApp):
         except NameError:
             toast("Error can't delete task.....")
 
-    def text(self):
-        api_key = "PKdyDYuaaEZ2vwwPogR8WA==8LPK2F0HaIMSXkP4"
-        api_url = 'https://api.api-ninjas.com/v1/quotes?'
-        response = requests.get(api_url, headers={'X-Api-Key': 'PKdyDYuaaEZ2vwwPogR8WA==8LPK2F0HaIMSXkP4'})
-        res = response.json()
-        print(res)
-        print(len(res))
-
     def show_loading_dialog(self, *args):
         if not self.loading_dialog:
             self.loading_dialog = MDDialog(
                 type="custom",
                 auto_dismiss=False,
                 content_cls=LoadingDialog(),
-                md_bg_color=rgba(randrange(200), randrange(200), randrange(200), 255)
+                md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 200)
 
             )
         self.loading_dialog.open()
@@ -1297,8 +1244,8 @@ class XtrA(MDApp):
         Clock.schedule_once(self.check_for_network, 30)
         Clock.schedule_once(self.close_loading_dialog, 35)
         if len(current_theme) == 0:
-            self.theme_cls.primary_palette = 'BlueGray'
-            self.theme_cls.accent_palette = "BlueGray"
+            self.theme_cls.primary_palette = 'Pink'
+            self.theme_cls.accent_palette = "Purple"
             self.theme_cls.primary_hue = "500"
             self.theme_cls.theme_style = "Light"
         else:
@@ -1367,12 +1314,12 @@ class XtrA(MDApp):
 
             if uncomplete_tasks != []:
                 for task in uncomplete_tasks:
-                    add_task = ListItemWithCheckbox(pk=task[0], text=task[1], secondary_text=task[2], md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 255))
+                    add_task = ListItemWithCheckbox(pk=task[0], text=task[1], secondary_text=task[2], md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 50))
                     self.root.ids.container.add_widget(add_task)
 
             if completed_tasks != []:
                 for task in completed_tasks:
-                    add_task = ListItemWithCheckbox(pk=task[0], text='[s]' + task[1] + '[/s]', secondary_text=task[2], md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 255))
+                    add_task = ListItemWithCheckbox(pk=task[0], text='[s]' + task[1] + '[/s]', secondary_text=task[2], md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 50))
                     add_task.ids.check.active = True
 
         except Exception as e:
@@ -1384,21 +1331,17 @@ class XtrA(MDApp):
     def load(self, *args):
         try:
             self.show_banner_ads()
-            for i in range(3):
-                print(i + 1)
+            for i in range(13):
                 self.quotes_for_the_day()
-            for i in range(3):
+
+            for i in range(13):
                 self.most_popular_quote()
-                print(i + 1)
-            for i in range(5):
-                self.get_my_quotes()
-            # to add 20 different quotes of the day we use the range function
-            for i in range(3):
+
+            for i in range(13):
                 self.get_quotes_of_the_day()
-                print(i + 1)
-                # self.quotes_for_the_day()
-                # self.get_quotes_of_the_day()
-            # Load the saved tasks and add them to the MDList widget when the application start
+
+            for i in range(12):
+                self.get_my_quotes()
 
         except requests.exceptions.ConnectionError:
             self.show_error_dialog()
@@ -1516,7 +1459,7 @@ class XtrA(MDApp):
         toast("Successfully Created: " + task.text, background=self.theme_cls.primary_color)
         self.root.ids.container.add_widget(
             ListItemWithCheckbox(pk=created_task[0], text='[b]' + created_task[1] + '[/b]',
-                                 secondary_text=created_task[2], md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 255)))  # Here
+                                 secondary_text=created_task[2],text_color=(1,1,1,1), md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 50)))  # Here
         task.text = '' # set the dialog entry to an empty string(clear the text entry)
 
     def show_task_dialog(self):
@@ -1887,16 +1830,17 @@ class XtrA(MDApp):
     def home_refresh(self):
         self.show_loading_dialog()
         try:
-            for i in range(10):
-                self.quotes_for_the_day()
-            for i in range(13):
+            for i in range(2):
+                self.get_my_quotes()
+            for i in range(15):
                 self.most_popular_quote()
-            # to add 20 different quotes of the day we use the range function
             for i in range(15):
                 self.get_quotes_of_the_day()
-            Clock.schedule_once(self.close_loading_dialog, 9)
-        except requests.exceptions.ConnectionError:
+            for i in range(15):
+                self.quotes_for_the_day()
+        except requests.ConnectionError:
             self.show_error_dialog()
+        Clock.schedule_once(self.close_loading_dialog, 14)
 
     def refresh(self):
         self.show_loading_dialog()
@@ -1972,7 +1916,7 @@ class XtrA(MDApp):
         for i in range(1):
             self.root.ids.quotes_of_the_day_layout.add_widget(
                 QuotesOfTheDaycard(qoute_of_the_day_text=random.choice(my_quotes), quote_of_the_day_author=random.choice(author),
-                                   md_bg_color=rgba(randrange(180), randrange(180), randrange(180), 255)))
+                                   md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 50)))
 
     def get_quotes_of_the_day(self):
         #self.text()
@@ -1986,7 +1930,7 @@ class XtrA(MDApp):
             toast("Done", background=self.theme_cls.accent_color)
             for i in range(1):
                 self.root.ids.quotes_of_the_day_layout.add_widget(
-                    QuotesOfTheDaycard(qoute_of_the_day_text=quotes, quote_of_the_day_author=author,md_bg_color=rgba(randrange(180), randrange(180), randrange(180), 255)))
+                    QuotesOfTheDaycard(qoute_of_the_day_text=quotes, quote_of_the_day_author=author,md_bg_color=rgba(randrange(255), randrange(255), randrange(255), 30)))
         except requests.exceptions.ConnectionError:
             toast("error Network")
             self.show_error_dialog()
@@ -2013,11 +1957,9 @@ class XtrA(MDApp):
         url ="http://api.quotable.io/random"
         request = requests.get(url)
         responsed = request.json()
-        print(responsed)
         tags = responsed["tags"]
         quotes = responsed["content"]
         author = responsed["author"]
-        print(tags, quotes, author)
         for i in range(1):
             self.root.ids.most_popular_quotes_layout.add_widget(MostPopularMotivation(most_popular_quotes_text=quotes,most_popular_quotes_author=author, most_popular_quote_bg_image=random.choice(motivation_bg_images)))
 
@@ -2041,8 +1983,6 @@ class XtrA(MDApp):
         api_url = 'https://api.api-ninjas.com/v1/quotes?'
         request = requests.get(api_url, headers={'X-Api-Key': 'PKdyDYuaaEZ2vwwPogR8WA==8LPK2F0HaIMSXkP4'})
         res = request.json()
-        print(res)
-        print(len(res))
         quotes = res[0]['quote']
         author = res[0]['author']
         for i in range(1):
